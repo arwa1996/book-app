@@ -1,7 +1,12 @@
-export const BookShelfChanger = () => {
+interface bookShelfChangerProps {
+  bookChanger: (value: string) => void;
+}
+
+export const BookShelfChanger = ({ bookChanger }: bookShelfChangerProps) => {
+  // set the states
   return (
     <div className='book-shelf-changer'>
-      <select>
+      <select onChange={(e) => bookChanger(e.target.value)}>
         <option value='move' disabled>
           Move to...
         </option>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 import { Book } from './components/BookShelf/Book';
@@ -28,6 +28,9 @@ const BooksApp = () => {
       });
   }, []);
 
+  const updateBookShelf = (book: any, shelf: string) => {
+    BooksAPI.update(book, shelf);
+  };
   const currentlyReadingBooks = books
     .filter((book: any) => book.shelf === 'currentlyReading')
     .map((book) => book);
@@ -53,43 +56,49 @@ const BooksApp = () => {
             <div>
               <BookShelf title={'Currently Reading'}>
                 <ol className='books-grid'>
-                  <li>
-                    {currentlyReadingBooks.map((book: any) => (
+                  {currentlyReadingBooks.map((book: any) => (
+                    <li>
                       <Book
                         bookTitle={book.title}
                         bookAuthor={`Arwa`}
                         URL={`url(${book.imageLinks.smallThumbnail})`}
+                        book={book}
+                        updateBookShelf={updateBookShelf}
                       />
-                    ))}
-                  </li>
+                    </li>
+                  ))}
                 </ol>
               </BookShelf>
 
               <BookShelf title={'Want to Read'}>
                 <ol className='books-grid'>
-                  <li>
-                    {wantToReadBooks.map((book: any) => (
+                  {wantToReadBooks.map((book: any) => (
+                    <li>
                       <Book
                         bookTitle={book.title}
                         bookAuthor={`Arwa`}
                         URL={`url(${book.imageLinks.smallThumbnail})`}
+                        book={book}
+                        updateBookShelf={updateBookShelf}
                       />
-                    ))}
-                  </li>
+                    </li>
+                  ))}
                 </ol>
               </BookShelf>
 
               <BookShelf title={'Read'}>
                 <ol className='books-grid'>
-                  <li>
-                    {readBooks.map((book: any) => (
+                  {readBooks.map((book: any) => (
+                    <li>
                       <Book
                         bookTitle={book.title}
                         bookAuthor={`Arwa`}
                         URL={`url(${book.imageLinks.smallThumbnail})`}
+                        book={book}
+                        updateBookShelf={updateBookShelf}
                       />
-                    ))}
-                  </li>
+                    </li>
+                  ))}
                 </ol>
               </BookShelf>
             </div>
