@@ -1,32 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as BooksAPI from '../../BooksAPI';
+import { Book } from '../../components/BookShelf/Book';
 
 export const SearchBooks = () => {
+  const navigate = useNavigate();
+
+  const [searchWord, setSearchWord] = useState<string>('');
+  const [books, setBooks] = useState([]);
+
+  const updateBookShelf = (book: any, shelf: string) => {
+    BooksAPI.update(book, shelf);
+  };
+
   return (
     <div className='search-books'>
       <div className='search-books-bar'>
         <button
           className='close-search'
-          onClick={
-            () => console.log('close search')
-            //  setShowSearchPage(false)
-          }
+          onClick={() => {
+            navigate('/');
+          }}
         >
           Close
         </button>
         <div className='search-books-input-wrapper'>
-          {/*
-        NOTES: The search from BooksAPI is limited to a particular set of search terms.
-        You can find these search terms here:
-        https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-        However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-        you don't find a specific author or title. Every search is limited by search terms.
-      */}
-          <input type='text' placeholder='Search by title or author' />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              BooksAPI.search(searchWord).then((books) => {
+                setBooks(books);
+              });
+            }}
+          >
+            <input
+              type='text'
+              placeholder='Search by title or author'
+              value={searchWord}
+              onChange={(e) => setSearchWord(e.target.value)}
+            />
+          </form>
         </div>
       </div>
       <div className='search-books-results'>
-        <ol className='books-grid' />
+        <ol className='books-grid'>
+          {books.map((book: any, index) => (
+            <li key={index}>
+              <Book
+                bookTitle={book.title}
+                bookAuthor={`Arwa`}
+                URL={`url(${book.imageLinks.smallThumbnail})`}
+                book={book}
+                updateBookShelf={updateBookShelf}
+              />
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   );
