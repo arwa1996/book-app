@@ -9,7 +9,6 @@ export const SearchBooks = () => {
   const dispatch = useAppDispatch();
   const books = useAppSelector((state: any) => state.book.books);
   const [searchWord, setSearchWord] = useState<string>('');
-
   const updateShelf = (book: any, shelf: string) => {
     dispatch(updateBookShelf({ book, shelf }));
   };
@@ -50,6 +49,7 @@ export const SearchBooks = () => {
                 URL={`url(${book.imageLinks.smallThumbnail})`}
                 book={book}
                 updateBookShelf={updateShelf}
+                shelf={book.shelf}
               />
             </li>
           ))}

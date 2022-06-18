@@ -6,6 +6,7 @@ interface BookProps {
   URL?: string;
   updateBookShelf: (book: any, value: string) => void;
   book: any;
+  shelf: string;
 }
 
 export const Book = ({
@@ -14,6 +15,7 @@ export const Book = ({
   URL,
   updateBookShelf,
   book,
+  shelf,
 }: BookProps) => {
   const bookChanger = (shelf: string) => {
     updateBookShelf(book, shelf);
@@ -29,7 +31,7 @@ export const Book = ({
             backgroundImage: URL,
           }}
         />
-        <BookShelfChanger bookChanger={bookChanger} />
+        <BookShelfChanger bookChanger={bookChanger} shelf={shelf} />
       </div>
       <div className='book-title'>{bookTitle}</div>
       <div className='book-authors'>{bookAuthor}</div>

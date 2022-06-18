@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import * as BooksAPI from '../BooksAPI';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import { Book } from '../components/BookShelf/Book';
@@ -14,7 +13,7 @@ const HomePage = () => {
   const books = useAppSelector((state: any) => state.book.books);
 
   const [showSearchPage, setShowSearchPage] = useState<boolean>(false);
-
+  const [flip, setFlip] = useState<boolean>(false);
   useEffect(() => {
     dispatch(getBooks());
   }, [dispatch]);
@@ -22,6 +21,7 @@ const HomePage = () => {
   const updateShelf = (book: any, shelf: string) => {
     dispatch(updateBookShelf({ book, shelf }));
     dispatch(getBooks());
+    setFlip(!flip);
   };
   const currentlyReadingBooks = books.filter(
     (book: any) => book.shelf === 'currentlyReading'
@@ -54,6 +54,7 @@ const HomePage = () => {
                         URL={`url(${book.imageLinks.smallThumbnail})`}
                         book={book}
                         updateBookShelf={updateShelf}
+                        shelf={book.shelf}
                       />
                     </li>
                   ))}
@@ -70,6 +71,7 @@ const HomePage = () => {
                         URL={`url(${book.imageLinks.smallThumbnail})`}
                         book={book}
                         updateBookShelf={updateShelf}
+                        shelf={book.shelf}
                       />
                     </li>
                   ))}
@@ -86,6 +88,7 @@ const HomePage = () => {
                         URL={`url(${book.imageLinks.smallThumbnail})`}
                         book={book}
                         updateBookShelf={updateShelf}
+                        shelf={book.shelf}
                       />
                     </li>
                   ))}
