@@ -5,46 +5,33 @@ import '../App.css';
 import { Book } from '../components/BookShelf/Book';
 import { BookShelf } from '../components/BookShelf/BookShelf';
 import { SearchBooks } from '../components/SearchBooks/SearchBooks';
+import { getBooks, updateBookShelf } from '../store/book/bookActions';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 const HomePage = () => {
-  // state = {
-  //   /**
-  //    * TODO: Instead of using this state variable to keep track of which page
-  //    * we're on, use the URL in the browser's address bar. This will ensure that
-  //    * users can use the browser's back and forward buttons to navigate between
-  //    * pages, as well as provide a good URL they can bookmark and share.
-  //    */
-  //   showSearchPage: false,
-  // };
   const navigate = useNavigate();
-  const [books, setBooks] = useState([]);
+  const dispatch = useAppDispatch();
+  const books = useAppSelector((state: any) => state.book.books);
+
   const [showSearchPage, setShowSearchPage] = useState<boolean>(false);
 
   useEffect(() => {
-    BooksAPI.getAll()
-      .then((books) => {
-        setBooks(books);
-      })
-      .catch((error) => {
-        console.warn(error);
-      });
-  }, []);
+    dispatch(getBooks());
+  }, [dispatch]);
 
-  const updateBookShelf = (book: any, shelf: string) => {
-    console.log(book, shelf);
-    BooksAPI.update(book, shelf);
+  const updateShelf = (book: any, shelf: string) => {
+    dispatch(updateBookShelf({ book, shelf }));
+    dispatch(getBooks());
   };
-  const currentlyReadingBooks = books
-    .filter((book: any) => book.shelf === 'currentlyReading')
-    .map((book) => book);
+  const currentlyReadingBooks = books.filter(
+    (book: any) => book.shelf === 'currentlyReading'
+  );
 
-  const wantToReadBooks = books
-    .filter((book: any) => book.shelf === 'wantToRead')
-    .map((book) => book);
+  const wantToReadBooks = books.filter(
+    (book: any) => book.shelf === 'wantToRead'
+  );
 
-  const readBooks = books
-    .filter((book: any) => book.shelf === 'read')
-    .map((book) => book);
+  const readBooks = books.filter((book: any) => book.shelf === 'read');
 
   return (
     <div className='app'>
@@ -59,14 +46,14 @@ const HomePage = () => {
             <div>
               <BookShelf title={'Currently Reading'}>
                 <ol className='books-grid'>
-                  {currentlyReadingBooks.map((book: any) => (
-                    <li>
+                  {currentlyReadingBooks.map((book: any, index: number) => (
+                    <li key={index}>
                       <Book
                         bookTitle={book.title}
                         bookAuthor={`Arwa`}
                         URL={`url(${book.imageLinks.smallThumbnail})`}
                         book={book}
-                        updateBookShelf={updateBookShelf}
+                        updateBookShelf={updateShelf}
                       />
                     </li>
                   ))}
@@ -75,14 +62,14 @@ const HomePage = () => {
 
               <BookShelf title={'Want to Read'}>
                 <ol className='books-grid'>
-                  {wantToReadBooks.map((book: any) => (
-                    <li>
+                  {wantToReadBooks.map((book: any, index: number) => (
+                    <li key={index}>
                       <Book
                         bookTitle={book.title}
                         bookAuthor={`Arwa`}
                         URL={`url(${book.imageLinks.smallThumbnail})`}
                         book={book}
-                        updateBookShelf={updateBookShelf}
+                        updateBookShelf={updateShelf}
                       />
                     </li>
                   ))}
@@ -91,14 +78,14 @@ const HomePage = () => {
 
               <BookShelf title={'Read'}>
                 <ol className='books-grid'>
-                  {readBooks.map((book: any) => (
-                    <li>
+                  {readBooks.map((book: any, index: number) => (
+                    <li key={index}>
                       <Book
                         bookTitle={book.title}
                         bookAuthor={`Arwa`}
                         URL={`url(${book.imageLinks.smallThumbnail})`}
                         book={book}
-                        updateBookShelf={updateBookShelf}
+                        updateBookShelf={updateShelf}
                       />
                     </li>
                   ))}

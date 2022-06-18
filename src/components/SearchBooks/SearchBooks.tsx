@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as BooksAPI from '../../BooksAPI';
 import { Book } from '../../components/BookShelf/Book';
+import { searchBooks, updateBookShelf } from '../../store/book/bookActions';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export const SearchBooks = () => {
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
+  const books = useAppSelector((state: any) => state.book.books);
   const [searchWord, setSearchWord] = useState<string>('');
-  const [books, setBooks] = useState([]);
 
-  const updateBookShelf = (book: any, shelf: string) => {
-    BooksAPI.update(book, shelf);
+  const updateShelf = (book: any, shelf: string) => {
+    dispatch(updateBookShelf({ book, shelf }));
   };
-
   return (
     <div className='search-books'>
       <div className='search-books-bar'>
@@ -28,9 +28,7 @@ export const SearchBooks = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              BooksAPI.search(searchWord).then((books) => {
-                setBooks(books);
-              });
+              dispatch(searchBooks(searchWord));
             }}
           >
             <input
@@ -44,14 +42,14 @@ export const SearchBooks = () => {
       </div>
       <div className='search-books-results'>
         <ol className='books-grid'>
-          {books.map((book: any, index) => (
+          {books.map((book: any, index: number) => (
             <li key={index}>
               <Book
                 bookTitle={book.title}
                 bookAuthor={`Arwa`}
                 URL={`url(${book.imageLinks.smallThumbnail})`}
                 book={book}
-                updateBookShelf={updateBookShelf}
+                updateBookShelf={updateShelf}
               />
             </li>
           ))}
