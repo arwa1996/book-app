@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 interface bookShelfChangerProps {
   bookChanger: (value: string) => void;
   shelf?: string;
@@ -12,10 +10,10 @@ export const BookShelfChanger = ({
   return (
     <div className='book-shelf-changer'>
       <select
-        onChange={(e) => {
-          bookChanger(e.target.value);
+        onChange={async (e) => {
+          await bookChanger(e.target.value);
         }}
-        defaultValue={shelf}
+        value={shelf}
       >
         <option value='move' disabled>
           Move to...
