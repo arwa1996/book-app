@@ -18,10 +18,10 @@ const searchBooks = createAsyncThunk(
   'book/searchBooks',
   async (searchWord: string) => {
     let result;
-    if (searchWord.trim()) {
+    if (searchWord) {
       result = await BookAPI.search(searchWord);
+      return result;
     }
-    return result;
   }
 );
 

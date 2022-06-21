@@ -38,14 +38,14 @@ export const SearchBooks = () => {
             value={searchWord}
             onChange={async (e) => {
               setSearchWord(e.target.value);
-              await dispatch(searchBooks(searchWord));
+              await dispatch(searchBooks(e.target.value));
             }}
           />
         </div>
       </div>
       <div className='search-books-results'>
         <ol className='books-grid'>
-          {searchedBooks?.length > 0 &&
+          {searchedBooks?.length > 0 ? (
             searchedBooks.map((book: BookType, index: number) => {
               const defaultShelf = books?.find(
                 (b: BookType) => b.id === book.id
@@ -62,7 +62,10 @@ export const SearchBooks = () => {
                   />
                 </li>
               );
-            })}
+            })
+          ) : (
+            <p>No books were found</p>
+          )}
         </ol>
       </div>
     </div>
