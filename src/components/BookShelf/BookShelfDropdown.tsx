@@ -3,7 +3,7 @@ interface bookShelfChangerProps {
   shelf?: string;
 }
 
-export const BookShelfChanger = ({
+export const BookShelfDropdown = ({
   bookChanger,
   shelf,
 }: bookShelfChangerProps) => {

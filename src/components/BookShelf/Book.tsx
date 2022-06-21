@@ -1,5 +1,5 @@
 import { BookType } from '../../store/book/bookSlice';
-import { BookShelfChanger } from './BookShelfChanger';
+import { BookShelfDropdown } from './BookShelfDropdown';
 
 interface BookProps {
   bookTitle?: string;
@@ -32,7 +32,7 @@ export const Book = ({
             backgroundImage: URL,
           }}
         />
-        <BookShelfChanger bookChanger={bookChanger} shelf={shelf} />
+        <BookShelfDropdown bookChanger={bookChanger} shelf={shelf} />
       </div>
       <div className='book-title'>{bookTitle}</div>
       <div className='book-authors'>{bookAuthor}</div>
