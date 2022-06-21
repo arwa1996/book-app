@@ -23,12 +23,18 @@ export const bookSlice = createSlice({
   initialState,
   extraReducers(builder) {
     builder
-      .addCase(getBooks.fulfilled, (state, action: PayloadAction<any>) => {
-        state.books = action.payload;
-      })
-      .addCase(searchBooks.fulfilled, (state, action: PayloadAction<any>) => {
-        state.searchedBooks = action.payload;
-      });
+      .addCase(
+        getBooks.fulfilled,
+        (state, action: PayloadAction<BookType[]>) => {
+          state.books = action.payload;
+        }
+      )
+      .addCase(
+        searchBooks.fulfilled,
+        (state, action: PayloadAction<BookType[]>) => {
+          state.searchedBooks = action.payload;
+        }
+      );
   },
   reducers: {},
 });
