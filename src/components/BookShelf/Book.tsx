@@ -1,11 +1,12 @@
+import { BookType } from '../../store/book/bookSlice';
 import { BookShelfChanger } from './BookShelfChanger';
 
 interface BookProps {
   bookTitle?: string;
-  bookAuthor?: string;
+  bookAuthor?: string | string[];
   URL?: string;
-  updateBookShelf: (book: any, value: string) => void;
-  book: any;
+  updateBookShelf: (book: BookType, value: string) => void;
+  book: BookType;
   shelf: string;
 }
 
@@ -17,8 +18,8 @@ export const Book = ({
   book,
   shelf,
 }: BookProps) => {
-  const bookChanger = (shelf: string) => {
-    updateBookShelf(book, shelf);
+  const bookChanger = async (shelf: string) => {
+    await updateBookShelf(book, shelf);
   };
   return (
     <div className='book'>

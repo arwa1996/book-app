@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Book } from '../../components/BookShelf/Book';
-import { searchBooks, updateBookShelf } from '../../store/book/bookActions';
+import {
+  getBooks,
+  searchBooks,
+  updateBookShelf,
+} from '../../store/book/bookActions';
+import { BookType } from '../../store/book/bookSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export const SearchBooks = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const books = useAppSelector((state: any) => state.book.books);
+  const searchedBooks = useAppSelector((state) => state.book.searchedBooks);
+  const books = useAppSelector((state) => state.book.books);
   const [searchWord, setSearchWord] = useState<string>('');
-  const updateShelf = (book: any, shelf: string) => {
-    dispatch(updateBookShelf({ book, shelf }));
+  const updateShelf = async (book: BookType, shelf: string) => {
+    await dispatch(updateBookShelf({ book, shelf }));
+    await dispatch(getBooks());
   };
+
   return (
     <div className='search-books'>
       <div className='search-books-bar'>
@@ -24,35 +32,37 @@ export const SearchBooks = () => {
           Close
         </button>
         <div className='search-books-input-wrapper'>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              dispatch(searchBooks(searchWord));
+          <input
+            type='text'
+            placeholder='Search by title or author'
+            value={searchWord}
+            onChange={async (e) => {
+              setSearchWord(e.target.value);
+              await dispatch(searchBooks(searchWord));
             }}
-          >
-            <input
-              type='text'
-              placeholder='Search by title or author'
-              value={searchWord}
-              onChange={(e) => setSearchWord(e.target.value)}
-            />
-          </form>
+          />
         </div>
       </div>
       <div className='search-books-results'>
         <ol className='books-grid'>
-          {books.map((book: any, index: number) => (
-            <li key={index}>
-              <Book
-                bookTitle={book.title}
-                bookAuthor={`Arwa`}
-                URL={`url(${book.imageLinks.smallThumbnail})`}
-                book={book}
-                updateBookShelf={updateShelf}
-                shelf={book.shelf}
-              />
-            </li>
-          ))}
+          {searchedBooks?.length > 0 &&
+            searchedBooks.map((book: BookType, index: number) => {
+              const defaultShelf = books?.find(
+                (b: BookType) => b.id === book.id
+              );
+              return (
+                <li key={index}>
+                  <Book
+                    bookTitle={book.title}
+                    bookAuthor={book.authors}
+                    URL={`url(${book.imageLinks?.smallThumbnail})`}
+                    book={book}
+                    updateBookShelf={updateShelf}
+                    shelf={defaultShelf ? defaultShelf.shelf : 'none'}
+                  />
+                </li>
+              );
+            })}
         </ol>
       </div>
     </div>

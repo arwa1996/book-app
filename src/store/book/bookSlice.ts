@@ -1,12 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getBooks, searchBooks } from './bookActions';
 
+export interface BookType {
+  id: string;
+  title: string;
+  authors: string[];
+  shelf: string;
+  imageLinks: { smallThumbnail: string; thumbnail: string };
+}
 export interface bookState {
-  books: [];
+  books: BookType[];
+  searchedBooks: BookType[];
 }
 
 const initialState: bookState = {
   books: [],
+  searchedBooks: [],
 };
 
 export const bookSlice = createSlice({
@@ -18,7 +27,7 @@ export const bookSlice = createSlice({
         state.books = action.payload;
       })
       .addCase(searchBooks.fulfilled, (state, action: PayloadAction<any>) => {
-        state.books = action.payload;
+        state.searchedBooks = action.payload;
       });
   },
   reducers: {},
