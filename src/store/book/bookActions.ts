@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import * as BookAPI from '../../BooksAPI';
+import { BookType } from './bookSlice';
 
 const getBooks = createAsyncThunk('book/getBooks', async () => {
   const result = await BookAPI.getAll();
@@ -8,15 +9,18 @@ const getBooks = createAsyncThunk('book/getBooks', async () => {
 
 const updateBookShelf = createAsyncThunk(
   'book/updateBookShelf',
-  async ({ book, shelf }: any) => {
-    await BookAPI.update(book, shelf);
+  async ({ book, shelf }: { book: BookType; shelf: string }) => {
+    return await BookAPI.update(book, shelf);
   }
 );
 
 const searchBooks = createAsyncThunk(
   'book/searchBooks',
-  async (searchWord: any) => {
-    const result = await BookAPI.search(searchWord);
+  async (searchWord: string) => {
+    let result;
+    if (searchWord.trim()) {
+      result = await BookAPI.search(searchWord);
+    }
     return result;
   }
 );
